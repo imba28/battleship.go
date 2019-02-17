@@ -5,10 +5,14 @@ import (
 	"time"
 )
 
+const (
+	BOARD_SIZE = 9
+)
+
 type Round struct {
 	playerA, playerB *Player
-	nextPlayer *Player
-	gameStarted time.Time
+	nextPlayer       *Player
+	gameStarted      time.Time
 }
 
 func (r *Round) IsWaiting() bool {
@@ -24,8 +28,30 @@ func (r *Round) StartRound() {
 	r.gameStarted = time.Now()
 
 	log.Printf("Starting round at %s", r.gameStarted.String())
+	r.broadcast("Starting game round!")
 }
 
 func (r *Round) AddPlayer(p *Player) {
-	r.playerB = p
+	switch {
+	case r.playerA == nil:
+		r.playerA = p
+	case r.playerB == nil:
+		r.playerB = p
+	}
+}
+
+func (r *Round) broadcast(message string) {
+	m := NewAnnouncement(message)
+	if r.playerA != nil {
+		l, err := r.playerA.Send(m)
+		if err != nil {
+			log.Print(l, err)
+		}
+	}
+	if r.playerA != nil {
+		l, err := r.playerB.Send(m)
+		if err != nil {
+			log.Print(l, err)
+		}
+	}
 }

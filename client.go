@@ -18,5 +18,6 @@ func main() {
 		}
 	}
 
-	battleship.Connect(addr).Play()
+	c := battleship.Connect(addr)
+	c.Play()
 }
