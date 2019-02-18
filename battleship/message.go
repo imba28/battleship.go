@@ -1,6 +1,9 @@
 package battleship
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 const (
 	MESSAGE_INFO       = "info"
@@ -23,4 +26,12 @@ func NewAnnouncement(body string) Message {
 
 func NewDrawBoard() Message {
 	return newMessage(MESSAGE_DRAW_BOARD, "todo")
+}
+
+func (m Message) String() string {
+	s, err := json.Marshal(m)
+	if err != nil {
+		return ""
+	}
+	return string(s)
 }

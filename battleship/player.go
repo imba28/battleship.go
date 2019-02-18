@@ -1,7 +1,7 @@
 package battleship
 
 import (
-	"encoding/json"
+	"fmt"
 	"net"
 )
 
@@ -10,11 +10,16 @@ type Player struct {
 	ships *[]Ship
 }
 
-func (p *Player) Send(message Message) (int, error) {
+func (p *Player) Send(message interface{}) (int, error) {
 	conn := *p.conn
-	b, err := json.Marshal(message)
-	if err != nil {
-		return 0, err
+	var b []byte
+
+	switch message.(type) {
+	case string:
+		m := NewAnnouncement(message.(string))
+		b = []byte(m.String())
+	case fmt.Stringer:
+		b = []byte(message.(fmt.Stringer).String())
 	}
 
 	return conn.Write(b)

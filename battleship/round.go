@@ -29,6 +29,8 @@ func (r *Round) StartRound() {
 
 	log.Printf("Starting round at %s", r.gameStarted.String())
 	r.broadcast("Starting game round!")
+
+	r.broadcast(NewDrawBoard())
 }
 
 func (r *Round) AddPlayer(p *Player) {
@@ -40,16 +42,15 @@ func (r *Round) AddPlayer(p *Player) {
 	}
 }
 
-func (r *Round) broadcast(message string) {
-	m := NewAnnouncement(message)
+func (r *Round) broadcast(message interface{}) {
 	if r.playerA != nil {
-		l, err := r.playerA.Send(m)
+		l, err := r.playerA.Send(message)
 		if err != nil {
 			log.Print(l, err)
 		}
 	}
 	if r.playerA != nil {
-		l, err := r.playerB.Send(m)
+		l, err := r.playerB.Send(message)
 		if err != nil {
 			log.Print(l, err)
 		}
