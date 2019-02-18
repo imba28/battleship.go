@@ -72,3 +72,13 @@ func (s *Server) newRound(p *Player) {
 	m := NewAnnouncement("Waiting for another player to join...")
 	p.Send(m)
 }
+
+func (s *Server) endRound(r *Round) {
+	rounds := make([]*Round, len(s.rounds))
+	for _, round := range s.rounds {
+		if &*round != &*r {
+			rounds = append(rounds, round)
+		}
+	}
+	s.rounds = rounds
+}

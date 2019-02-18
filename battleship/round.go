@@ -29,16 +29,19 @@ func (r *Round) StartRound() {
 
 	log.Printf("Starting round at %s", r.gameStarted.String())
 	r.broadcast("Starting game round!")
-
-	r.broadcast(NewDrawBoard())
 }
 
 func (r *Round) AddPlayer(p *Player) {
 	switch {
 	case r.playerA == nil:
 		r.playerA = p
+		r.playerA.AddShips()
+		r.playerA.Send(NewDrawBoard(r.playerA.ships))
+
 	case r.playerB == nil:
 		r.playerB = p
+		r.playerB.AddShips()
+		r.playerB.Send(NewDrawBoard(r.playerB.ships))
 	}
 }
 
@@ -55,4 +58,20 @@ func (r *Round) broadcast(message interface{}) {
 			log.Print(l, err)
 		}
 	}
+}
+
+func (r *Round) End(reason string) {
+	m := NewAnnouncement(reason)
+	if conn := r.playerA.conn; conn != nil {
+		r.playerA.Send(m)
+		(*conn).Close()
+	}
+	if conn := r.playerB.conn; conn != nil {
+		r.playerB.Send(m)
+		(*conn).Close()
+	}
+}
+
+func (r *Round) onError(err error) {
+	r.End(err.Error())
 }

@@ -7,7 +7,7 @@ import (
 
 type Player struct {
 	conn  *net.Conn
-	ships *[]Ship
+	ships []Ship
 }
 
 func (p *Player) Send(message interface{}) (int, error) {
@@ -22,5 +22,22 @@ func (p *Player) Send(message interface{}) (int, error) {
 		b = []byte(message.(fmt.Stringer).String())
 	}
 
+	fmt.Println(string(b))
+
 	return conn.Write(b)
+}
+
+func (p *Player) AddShips() {
+	shipTypes := []rune{SHIP_CARRIER, SHIP_BATTLESHIP, SHIP_DESTROYER, SHIP_SUBMARINE}
+	ships := make([]Ship, len(shipTypes))
+
+	blockedTiles := make([]Coordinate, 20)
+
+	for i, shipType := range shipTypes {
+		ship := NewRandomShip(shipType, &blockedTiles)
+		ships[i] = ship
+		blockedTiles = append(blockedTiles, ship.coordinates...)
+	}
+
+	p.ships = ships
 }
