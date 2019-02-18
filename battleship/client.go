@@ -45,6 +45,7 @@ func (c *Client) Play() {
 			log.Fatal(err)
 		}
 
+		fmt.Println(string(b))
 		var m Message
 		if err := json.Unmarshal(bytes.Trim(b, "\x00"), &m); err != nil {
 			log.Println(err)
@@ -54,22 +55,28 @@ func (c *Client) Play() {
 				fmt.Println(m.Body)
 
 			case MESSAGE_DRAW_BOARD:
-				c.drawBoard(c.generateBoard())
+				c.drawBoard(c.generateBoard(m.Body.(string)))
 			}
 		}
 	}
 }
 
-func (c *Client) generateBoard() [][]string {
+func (c *Client) generateBoard(s string) [][]string {
 	board := make([][]string, BOARD_SIZE)
 
 	for y := 0; y < BOARD_SIZE; y++ {
 		row := make([]string, BOARD_SIZE)
 
 		for x := 0; x < BOARD_SIZE; x++ {
-			row[x] = "X"
+			row[x] = " "
 		}
 		board[y] = row
+	}
+
+	for i := 0; i < len(s); i += 2 {
+		x, _ := strconv.Atoi(string(s[i]))
+		y, _ := strconv.Atoi(string(s[i+1]))
+		board[y][x] = "H"
 	}
 
 	return board

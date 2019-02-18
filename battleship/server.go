@@ -12,7 +12,7 @@ const (
 )
 
 type Server struct {
-	rounds []Round
+	rounds []*Round
 }
 
 func (s *Server) Run() {
@@ -52,7 +52,6 @@ func (s *Server) handleClient(c *net.Conn) {
 			log.Printf("Adding %s to an existing round with %s.", conn.RemoteAddr().String(), connBuddy.RemoteAddr().String())
 			round.AddPlayer(&player)
 			round.StartRound()
-			player.Send(NewDrawBoard())
 			return
 		}
 	}
@@ -64,8 +63,11 @@ func (s *Server) newRound(p *Player) {
 	conn := *p.conn
 
 	fmt.Printf("Starting new round with player %s", conn.RemoteAddr().String())
-	round := Round{playerA: p}
-	s.rounds = append(s.rounds, round)
+
+	round := Round{}
+	round.AddPlayer(p)
+
+	s.rounds = append(s.rounds, &round)
 
 	m := NewAnnouncement("Waiting for another player to join...")
 	p.Send(m)
