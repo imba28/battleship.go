@@ -2,16 +2,20 @@ package battleship
 
 import (
 	"fmt"
-	"net"
+	"io"
 )
 
 type Player struct {
-	conn  *net.Conn
+	conn  io.ReadWriteCloser
 	ships []Ship
 }
 
 func (p *Player) Send(message interface{}) (int, error) {
-	conn := *p.conn
+	// todo
+	if p.conn == nil {
+		return 0, nil
+	}
+
 	var b []byte
 
 	switch message.(type) {
@@ -24,7 +28,7 @@ func (p *Player) Send(message interface{}) (int, error) {
 
 	fmt.Println(string(b))
 
-	return conn.Write(b)
+	return p.conn.Write(b)
 }
 
 func (p *Player) AddShips() {

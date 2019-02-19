@@ -34,17 +34,20 @@ type Client struct {
 }
 
 func (c *Client) Play() {
-	for {
-		if c.conn == nil {
-			log.Fatal("Disconnected!")
-		}
+	if c.conn == nil {
+		log.Fatal("Disconnected!")
+	}
 
+	c.readServerInput()
+}
+
+func (c *Client) readServerInput() {
+	for {
 		b := make([]byte, 128)
 		_, err := c.conn.Read(b)
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		fmt.Println(string(b))
 		var m Message
 		if err := json.Unmarshal(bytes.Trim(b, "\x00"), &m); err != nil {

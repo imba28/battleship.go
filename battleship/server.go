@@ -38,8 +38,7 @@ func (s *Server) Run() {
 }
 
 func (s *Server) handleClient(c *net.Conn) {
-	conn := *c
-	player := Player{conn: c}
+	player := Player{conn: *c}
 
 	for _, round := range s.rounds {
 		if round.IsWaiting() {
@@ -47,9 +46,9 @@ func (s *Server) handleClient(c *net.Conn) {
 				continue
 			}
 
-			connBuddy := *round.playerA.conn
+			connBuddy := round.playerA.conn
 
-			log.Printf("Adding %s to an existing round with %s.", conn.RemoteAddr().String(), connBuddy.RemoteAddr().String())
+			log.Printf("Adding %v to an existing round with %v.", c, connBuddy)
 			round.AddPlayer(&player)
 			round.StartRound()
 			return
@@ -60,9 +59,7 @@ func (s *Server) handleClient(c *net.Conn) {
 }
 
 func (s *Server) newRound(p *Player) {
-	conn := *p.conn
-
-	fmt.Printf("Starting new round with player %s", conn.RemoteAddr().String())
+	fmt.Printf("Starting new round with player %s", p.conn)
 
 	round := Round{}
 	round.AddPlayer(p)

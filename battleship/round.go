@@ -29,6 +29,9 @@ func (r *Round) StartRound() {
 
 	log.Printf("Starting round at %s", r.gameStarted.String())
 	r.broadcast("Starting game round!")
+
+	//go r.readPlayerInput(r.playerA)
+	//go r.readPlayerInput(r.playerB)
 }
 
 func (r *Round) AddPlayer(p *Player) {
@@ -64,11 +67,11 @@ func (r *Round) End(reason string) {
 	m := NewAnnouncement(reason)
 	if conn := r.playerA.conn; conn != nil {
 		r.playerA.Send(m)
-		(*conn).Close()
+		conn.Close()
 	}
 	if conn := r.playerB.conn; conn != nil {
 		r.playerB.Send(m)
-		(*conn).Close()
+		conn.Close()
 	}
 }
 
