@@ -66,10 +66,16 @@ func NewRandomShip(shipType rune, blockedTiles *[]Coordinate) Ship {
 			}
 		}
 
+		shipBlocksExistingShip := false
 		for _, coord := range coords {
 			if coord.InList(*blockedTiles) {
-				continue
+				shipBlocksExistingShip = true
+				break
 			}
+		}
+
+		if shipBlocksExistingShip {
+			continue
 		}
 
 		ship.coordinates = coords
