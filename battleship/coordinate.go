@@ -6,8 +6,6 @@ type Coordinate struct {
 	x, y int
 }
 
-type CoordinateList []Coordinate
-
 func (c *Coordinate) Blocks(other Coordinate) bool {
 	return c.x == other.x && c.y == other.y
 }
