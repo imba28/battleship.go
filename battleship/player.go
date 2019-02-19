@@ -31,7 +31,7 @@ func (p *Player) AddShips() {
 	shipTypes := []rune{SHIP_CARRIER, SHIP_BATTLESHIP, SHIP_DESTROYER, SHIP_SUBMARINE}
 	ships := make([]Ship, len(shipTypes))
 
-	blockedTiles := make([]Coordinate, 20)
+	blockedTiles := []Coordinate{}
 
 	for i, shipType := range shipTypes {
 		ship := NewRandomShip(shipType, &blockedTiles)
