@@ -18,25 +18,25 @@ func TestNewAnnouncement(t *testing.T) {
 
 func TestNewDrawBoard(t *testing.T) {
 	ships := []Ship{
-		{coordinates: []Coordinate{
+		{shipType: SHIP_CARRIER, coordinates: []Coordinate{
 			{0, 0},
 			{1, 0},
 			{2, 0},
 			{3, 0},
 		}},
-		{coordinates: []Coordinate{
+		{shipType: SHIP_DESTROYER, coordinates: []Coordinate{
 			{5, 5},
 			{5, 4},
 			{5, 3},
 		}},
-		{coordinates: []Coordinate{
+		{shipType: SHIP_DESTROYER, coordinates: []Coordinate{
 			{9, 9},
 			{9, 8},
 			{9, 7},
 		}},
 	}
 	m := NewDrawBoard(ships)
-	expected := "00102030555453999897"
+	expected := "C00102030D555453D999897"
 
 	if s := m.String(); !strings.Contains(s, fmt.Sprintf(`"%s"`, expected)) {
 		t.Errorf("Expected message body to contain %s but got %s", expected, s)

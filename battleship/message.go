@@ -30,6 +30,7 @@ func NewDrawBoard(ships []Ship) Message {
 	b := []string{}
 
 	for _, s := range ships {
+		b = append(b, string(s.shipType))
 		for _, c := range s.coordinates {
 			b = append(b, strconv.Itoa(c.x))
 			b = append(b, strconv.Itoa(c.y))

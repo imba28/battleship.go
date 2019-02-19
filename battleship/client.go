@@ -73,10 +73,17 @@ func (c *Client) generateBoard(s string) [][]string {
 		board[y] = row
 	}
 
+	shipType := ""
 	for i := 0; i < len(s); i += 2 {
-		x, _ := strconv.Atoi(string(s[i]))
-		y, _ := strconv.Atoi(string(s[i+1]))
-		board[y][x] = "H"
+		if _, err := strconv.Atoi(string(s[i])); err == nil {
+			x, _ := strconv.Atoi(string(s[i]))
+			y, _ := strconv.Atoi(string(s[i+1]))
+			board[y][x] = shipType
+		} else {
+			shipType = string(s[i])
+			i--
+		}
+
 	}
 
 	return board
