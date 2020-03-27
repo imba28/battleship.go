@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/imba28/battleship/pkg/battleship"
 	"flag"
+	"github.com/imba28/battleship/pkg/battleship"
 	"log"
 	"math/rand"
 	"regexp"
