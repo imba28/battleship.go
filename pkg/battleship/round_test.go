@@ -26,6 +26,10 @@ func TestRound_AddPlayer(t *testing.T) {
 	}
 }
 
+func TestRound_Fail(t *testing.T) {
+	t.Errorf("This test should fail!")
+}
+
 func TestRound_IsWaiting(t *testing.T) {
 	r := Round{}
 	p1 := Player{}
